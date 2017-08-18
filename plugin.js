@@ -1,41 +1,34 @@
 const INCLUDE_SPEC_FILES = process.env.NODE_ENV === 'development';
 
-/*
-function jsHandler(compileStep) {
-  if (INCLUDE_SPEC_FILES) {
-    var source = compileStep.read().toString('utf8');
-    var outputFile = compileStep.inputPath + ".js";
-    var js = Babel.compile(source).code;
-    compileStep.addJavaScript({
-      path: outputFile,
-      sourcePath: compileStep.inputPath,
-      data: js
-    });
-  }
-}
-*/
+if (INCLUDE_SPEC_FILES) {
+  console.log(`
+*******************************************
+INCLUDING CTEMPLATE AND COMPONENTSPEC FILES
+*******************************************
+`);
 
-Plugin.registerCompiler({
-  extensions: ['ctemplate'],
-  isTemplate: true
-}, function() {
-  console.log('REGISTERED 1');
-  return new CachingHtmlCompiler(
-    'component-spec-handler',
-    TemplatingTools.scanHtmlForTags,
-    TemplatingTools.compileTagsWithSpacebars
-  );
-});
-
-Plugin.registerCompiler({
-  extensions: ['componentspec'],
-}, function () {
-  console.log('REGISTERED 2');
-  return new BabelCompiler({
-    react: false
+  Plugin.registerCompiler({
+    extensions: ['ctemplate'],
+    isTemplate: true
+  }, function() {
+    return new CachingHtmlCompiler(
+      'component-spec-handler',
+      TemplatingTools.scanHtmlForTags,
+      TemplatingTools.compileTagsWithSpacebars
+    );
   });
-});
 
-
-//Plugin.registerSourceHandler('componentspec', jsHandler);
-
+  Plugin.registerCompiler({
+    extensions: ['componentspec'],
+  }, function () {
+    return new BabelCompiler({
+      react: false
+    });
+  });
+} else {
+  console.log(`
+*******************************************
+EXCLUDING CTEMPLATE AND COMPONENTSPEC FILES
+*******************************************
+`);
+}

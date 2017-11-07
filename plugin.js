@@ -1,11 +1,22 @@
-const INCLUDE_SPEC_FILES = process.env.NODE_ENV === 'development';
+meteorEnv = {
+  NODE_ENV: process.env.NODE_ENV || "production"
+};
 
-if (INCLUDE_SPEC_FILES) {
-  console.log(`
-*******************************************
-INCLUDING CTEMPLATE AND COMPONENTSPEC FILES
-*******************************************
-`);
+Meteor = {
+  isProduction: meteorEnv.NODE_ENV === "production",
+  isDevelopment: meteorEnv.NODE_ENV !== "production"
+};
+
+if (Meteor.isDevelopment) {
+  const chalk = require('chalk');
+  console.log(chalk`
+  {red ┌─────────────────────────────┐}
+  {red │                             │}
+  {red │}{yellow   arggh:component-browser    }{red │}
+  {red │}{yellow  is included in your build.  }{red │}
+  {red │                             │}
+  {red └─────────────────────────────┘}
+  `);
 
   Plugin.registerCompiler({
     extensions: ['ctemplate'],
@@ -25,10 +36,4 @@ INCLUDING CTEMPLATE AND COMPONENTSPEC FILES
       react: false
     });
   });
-} else {
-  console.log(`
-*******************************************
-EXCLUDING CTEMPLATE AND COMPONENTSPEC FILES
-*******************************************
-`);
 }

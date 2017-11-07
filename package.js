@@ -9,7 +9,6 @@ Package.registerBuildPlugin({
   use: [
     'ecmascript',
     'babel-compiler',
-    'ecmascript',
     'caching-html-compiler',
     'templating-tools'
   ],
@@ -17,6 +16,7 @@ Package.registerBuildPlugin({
     'plugin.js'
   ],
   npmDependencies: {
+    chalk: '2.0.0'
   }
 });
 
